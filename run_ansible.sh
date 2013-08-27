@@ -14,4 +14,4 @@ else
 fi
 
 # Run Ansible
-ansible-playbook --inventory-file=$WORK_DIR/playbook/"ansible_hosts" $WORK_DIR/playbook/"playbook.yml"
+ansible-playbook --inventory-file=$WORK_DIR/playbook/"ansible_hosts" $WORK_DIR/playbook/"site.yml"
