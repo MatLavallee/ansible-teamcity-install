@@ -1,0 +1,8 @@
+---
+- hosts: teamcity
+  user: vagrant
+  tasks:
+    - name: update cache
+      apt: update_cache=yes
+    - name: install curl
+      apt: pkg=curl
