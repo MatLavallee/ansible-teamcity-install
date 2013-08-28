@@ -1,8 +1,13 @@
 ---
 - hosts: teamcity
-  user: vagrant
   vars:
     teamcity_user: teamcity
+    teamcity_user_home: "/home/{{teamcity_user}}"
+    version: 8.0.3
+    download_path: "{{teamcity_user_home}}/TeamCity-{{version}}.tar.gz"
+    install_dir: "{{teamcity_user_home}}"
+    install_path: "{{install_dir}}/TeamCity"
+    data_path: "{{teamcity_user_home}}/TeamCityData"
   tasks:
     - name: update cache
       apt: update_cache=yes
@@ -13,4 +18,16 @@
       apt: pkg=openjdk-7-jre
 
     - name: create user running teamcity
-      user: name={{teamcity_user}} home=/home/{{teamicty_user}}/ shell=/bin/bash comment="User running TeamCity"
+      user: name={{teamcity_user}} home=$teamcity_user_home comment="User running TeamCity"
+
+    - name: download teamcity
+      get_url: url=http://download.jetbrains.com/teamcity/TeamCity-{{version}}.tar.gz dest=$download_path
+
+    - name: unpack archive
+      command: tar -xvzf "{{download_path}}" --directory "{{install_dir}}" creates=$install_path
+
+
+
+
+
+
