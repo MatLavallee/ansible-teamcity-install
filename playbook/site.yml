@@ -29,6 +29,13 @@
     - name: set install directory owner
       file: path=$install_path owner=$teamcity_user group=$teamcity_user recurse=yes state=directory
 
+    - name: copy teamcity startup script
+      template: src=./templates/teamcity_service_script.sh.j2 dest=/etc/init.d/teamcity mode=755
+
+    - name: install teamcity as a service
+      service: name=teamcity enabled=yes state=started
+
+
 
 
 

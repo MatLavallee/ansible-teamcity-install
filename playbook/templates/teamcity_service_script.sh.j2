@@ -1,0 +1,22 @@
+#! /bin/sh
+
+# Set path to data
+export TEAMCITY_DATA_PATH="{{data_path}}"
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Starting script teamcity "
+    start-stop-daemon --start -c {{teamcity_user}} --exec {{install_path}}/bin/runAll.sh start
+    ;;
+  stop)
+    echo "Stopping script teamcity"
+    start-stop-daemon --start -c {{teamcity_user}} --exec {{install_path}}/bin/runAll.sh stop
+    ;;
+  *)
+    echo "Usage: /etc/init.d/teamcity {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
