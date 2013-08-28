@@ -1,8 +1,16 @@
 ---
 - hosts: teamcity
   user: vagrant
+  vars:
+    teamcity_user: teamcity
   tasks:
     - name: update cache
       apt: update_cache=yes
     - name: install curl
       apt: pkg=curl
+
+    - name: install java
+      apt: pkg=openjdk-7-jre
+
+    - name: create user running teamcity
+      user: name={{teamcity_user}} home=/home/{{teamicty_user}}/ shell=/bin/bash comment="User running TeamCity"
