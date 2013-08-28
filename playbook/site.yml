@@ -43,9 +43,8 @@
     - name: change permissions on ssh directory
       file: path="{{teamcity_user_home}}/.ssh" owner=$teamcity_user group=$teamcity_user recurse=yes state=directory mode=700
 
-
-
-
-
-
-
+    # Install git and hg
+    - name: install hg
+      apt: pkg=mercurial
+    - name: install git
+      apt: pkg=git-core
