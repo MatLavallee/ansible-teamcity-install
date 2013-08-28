@@ -35,6 +35,14 @@
     - name: install teamcity as a service
       service: name=teamcity enabled=yes state=started
 
+    # Generate a ssh key
+    - name: create ssh directory
+      file: path="{{teamcity_user_home}}/.ssh" state=directory
+    - name: create ssh key
+      command: ssh-keygen -t rsa -q -f "{{teamcity_user_home}}/.ssh/id_rsa" -N '' creates="{{teamcity_user_home}}/.ssh/id_rsa.pub"
+    - name: change permissions on ssh directory
+      file: path="{{teamcity_user_home}}/.ssh" owner=$teamcity_user group=$teamcity_user recurse=yes state=directory mode=700
+
 
 
 
