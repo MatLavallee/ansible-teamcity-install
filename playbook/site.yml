@@ -26,6 +26,9 @@
     - name: unpack archive
       command: tar -xvzf "{{download_path}}" --directory "{{install_dir}}" creates=$install_path
 
+    - name: set install directory owner
+      file: path=$install_path owner=$teamcity_user group=$teamcity_user recurse=yes state=directory
+
 
 
 
