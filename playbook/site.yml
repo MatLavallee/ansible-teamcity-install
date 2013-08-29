@@ -32,8 +32,10 @@
     - name: copy teamcity startup script
       template: src=./templates/teamcity_service_script.sh.j2 dest=/etc/init.d/teamcity mode=755
 
-    - name: install teamcity as a service
-      service: name=teamcity enabled=yes state=started
+    - name: configure teamcity to start on startup
+      command: update-rc.d teamcity defaults
+    - name: start teamcity now
+      service: name=teamcity state=started
 
     # Install git and hg
     - name: install hg
