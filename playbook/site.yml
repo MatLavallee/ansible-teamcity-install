@@ -18,7 +18,7 @@
       apt: pkg=openjdk-7-jre
 
     - name: create user running teamcity
-      user: name={{teamcity_user}} home=$teamcity_user_home comment="User running TeamCity"
+      user: name={{teamcity_user}} home=$teamcity_user_home comment="User running TeamCity" generate_ssh_key=yes
 
     - name: download teamcity
       get_url: url=http://download.jetbrains.com/teamcity/TeamCity-{{version}}.tar.gz dest=$download_path
@@ -34,14 +34,6 @@
 
     - name: install teamcity as a service
       service: name=teamcity enabled=yes state=started
-
-    # Generate a ssh key
-    - name: create ssh directory
-      file: path="{{teamcity_user_home}}/.ssh" state=directory
-    - name: create ssh key
-      command: ssh-keygen -t rsa -q -f "{{teamcity_user_home}}/.ssh/id_rsa" -N '' creates="{{teamcity_user_home}}/.ssh/id_rsa.pub"
-    - name: change permissions on ssh directory
-      file: path="{{teamcity_user_home}}/.ssh" owner=$teamcity_user group=$teamcity_user recurse=yes state=directory mode=700
 
     # Install git and hg
     - name: install hg
