@@ -1,0 +1,6 @@
+- name: Update cache
+  apt: update_cache=yes
+
+- name: Install packages
+  apt: pkg={{ item }} state=latest
+  with_items: utilities

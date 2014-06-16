@@ -1,44 +1,6 @@
 ---
 - hosts: teamcity
-  vars:
-    teamcity_user: teamcity
-    teamcity_user_home: "/home/{{teamcity_user}}"
-    version: 8.0.3
-    download_path: "{{teamcity_user_home}}/TeamCity-{{version}}.tar.gz"
-    install_dir: "{{teamcity_user_home}}"
-    install_path: "{{install_dir}}/TeamCity"
-    data_path: "{{teamcity_user_home}}/TeamCityData"
-  tasks:
-    - name: update cache
-      apt: update_cache=yes
-    - name: install curl
-      apt: pkg=curl
-
-    - name: install java
-      apt: pkg=openjdk-7-jre
-
-    - name: create user running teamcity
-      user: name={{teamcity_user}} home=$teamcity_user_home comment="User running TeamCity" generate_ssh_key=yes
-
-    - name: download teamcity
-      get_url: url=http://download.jetbrains.com/teamcity/TeamCity-{{version}}.tar.gz dest=$download_path
-
-    - name: unpack archive
-      command: tar -xvzf "{{download_path}}" --directory "{{install_dir}}" creates=$install_path
-
-    - name: set install directory owner
-      file: path=$install_path owner=$teamcity_user group=$teamcity_user recurse=yes state=directory
-
-    - name: copy teamcity startup script
-      template: src=./templates/teamcity_service_script.sh.j2 dest=/etc/init.d/teamcity mode=755
-
-    - name: configure teamcity to start on startup
-      command: update-rc.d teamcity defaults
-    - name: start teamcity now
-      service: name=teamcity state=started
-
-    # Install git and hg
-    - name: install hg
-      apt: pkg=mercurial
-    - name: install git
-      apt: pkg=git-core
+  
+  roles: 
+    - apt-packages
+    - teamcity-setup

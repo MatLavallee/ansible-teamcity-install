@@ -1,0 +1,20 @@
+- name: Create teamcity user
+  user: name={{ teamcity_user }} home={{ teamcity_user_home }} comment="Teamcity User" generate_ssh_key=yes
+
+- name: Download Team City
+  get_url: url={{ team_city_download_url }} dest={{ teamcity_download_path }}
+
+- name: Unpack team city archive
+  command: "tar -xvzf {{ teamcity_download_path }} --directory {{ teamcity_installation_directory }} creates={{ teamcity_installation_path }}"
+
+- name: Change team city install directory owner
+  file: path={{ teamcity_installation_path }} owner={{ teamcity_user }} group={{ teamcity_user }} recurse=yes state=directory
+
+- name: Add teamcity service to init.d
+  template: src=teamcity_service_script.sh.j2 dest=/etc/init.d/teamcity mode=755
+
+- name: Start teamcity
+  service: name=teamcity state=started
+
+- name: Stop teamcity
+  service: name=teamcity state=stopped
